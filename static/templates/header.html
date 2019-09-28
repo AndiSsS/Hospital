@@ -1,0 +1,98 @@
+<?php 
+ini_set('display_errors', 1);  ////////////////////////////////////// 
+require 'static/scripts/config.php';
+require 'static/scripts/dbManager.php';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital</title>
+    <link rel="icon" href="static/img/favicon.gif">
+    <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="static/js/jquery.flexdatalist.js"></script>
+    <script src="static/js/helpers.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/table.css">
+    <link rel="stylesheet" type="text/css" href="static/css/menu.css">
+    <link rel="stylesheet" type="text/css" href="static/css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="static/css/jquery.flexdatalist.css">
+</head>
+<body>
+    <ul class="nav">
+        <a href="/">
+            <li>
+                <?php 
+                if($active_item=='journal')
+                    echo '<i class="active fa fa-list-alt" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fa fa-list-alt" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Журнал</div>
+            </li>
+        </a>
+        <a href="/doctors">  
+            <li>
+                <?php 
+                if($active_item=='doctors')
+                    echo '<i class="active fa fa-user-md" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fa fa-user-md" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Лікарі</div>
+            </li>
+        </a>
+        <a href="/patients">
+            <li>
+                <?php 
+                if($active_item=='patients')
+                    echo '<i class="active $item_side fa fa-user" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fa fa-user" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Хворі</div>
+            </li>
+        </a>
+        <a href="/drugs">
+            <li>
+                <?php 
+                if($active_item=='drugs')
+                    echo '<i class="active fa fa-plus-circle" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fa fa-plus-circle" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Препарати</div>
+            </li>
+        </a>
+        <a href="/diseases">
+            <li>
+                <?php 
+                if($active_item=='diseases')
+                    echo '<i class="active fa fa-bug" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fa fa-bug" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Хвороби</div>
+            </li>
+        </a>
+        
+        <a href="/providers">
+            <li>
+                <?php 
+                if($active_item=='providers')
+                    echo '<i class="active fa fa-truck" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fa fa-truck" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Постачальники</div>
+            </li>
+        </a>
+    </ul>
+    
+    <script src='https://use.fontawesome.com/cece742d74.js'></script>
+
+    <div class="upper-wrap">
+        <div class="container-fluid">
+            <div class="row up-15">
