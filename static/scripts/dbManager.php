@@ -99,7 +99,7 @@ function eliminate_row($table, $row_id, $return_to=false){
 
 function _dbConnect(){
 	global $opt;
-	return new PDO("mysql:dbname=Rospital;host=127.0.0.1;charset=utf8", 'root', '', $opt);
+	return new PDO("mysql:dbname=Hospital;host=127.0.0.1;charset=utf8", 'root', '', $opt);
 }
 function _pdoSet($allowed, &$values, $source = array()) {
 	$set = '';
