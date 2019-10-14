@@ -2,7 +2,7 @@
 
 function dbConnect(){
 	global $opt;
-	return new PDO("mysql:dbname=Hospital;host=localhost;charset=utf8", 'root', 'MilkaMan0', $opt);
+	return new PDO("mysql:dbname=Hospital;host=localhost;charset=utf8", 'root', '', $opt);
 }
 
 function is_row_exists($row_id){
