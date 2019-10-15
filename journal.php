@@ -4,62 +4,68 @@ require 'static/templates/header.html';
 require 'static/templates/content.php';
 require 'static/scripts/helpers.php';  
 
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-// 	insert_row('journal', $journalAllowed, '/journal', $error);
-// }
-// else {
-// 	$search_clause = "";
-// 	$values = array();
-// 	$rangeStr = get_limit_range($rows_per_page, $page);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	insert_row('journal', $journalAllowed, '/journal', $error);
+}
+else {
+	$search_clause = "";
+	$values = array();
+	$rangeStr = get_limit_range($rows_per_page, $page);
 
-// 	if(isset($_GET['date']))
-// 		$search_clause = settle_search(array('date'=>'journal.date',
-// 											'quantity'=>'journal.quantity',
-// 											'd_name'=>'drugs.name',
-// 											'd_provider'=>'providers.name', 	
-// 											'pr_name'=>'providers.name',
-// 											'p_name'=>'drugs.name',
-// 											'p_surname'=>'drugs.name',
-// 											'p_patronymic'=>'drugs.name',
-// 											'p_disease_id'=>'drugs.name',
-// 											'p_doctor_id'=>'patients.name', 
-// 											), 
-// 										$values);
+	if(isset($_GET['date']))
+		$search_clause = settle_search(array('date'=>'journal.date',
+											'quantity'=>'journal.quantity',
+											'd_name'=>'drugs.name',
+											'd_provider'=>'providers.name', 	
+											'pr_name'=>'providers.name',
+											'p_name'=>'drugs.name',
+											'p_surname'=>'drugs.name',
+											'p_patronymic'=>'drugs.name',
+											'p_disease_id'=>'drugs.name',
+											'p_doctor_id'=>'patients.name', 
+											), 
+										$values);
 
-// $query = "SELECT SQL_CALC_FOUND_ROWS
-// 			journal.date,
-// 			journal.quantity,
-// 			--drugs.id as 'drugs_id',
-// 			drugs.name as 'drugs_name',
-// 			--providers.id as provider_id,
-// 			providers.name as provider_name,
-// 			--patients.name as patient_name,
-// 			patients.surname as patient_surname,
-// 			--patients.patronymic as patient_patronymic,
-// 			--patients.disease_id as patient_disease_id,
-// 			--doctors.id as doctor_id,
-// 			--doctors.id as doctor_id,
-// 			FROM journal 
-// 			JOIN providers ON journal.provider_id=providers.id
-// 			JOIN drugs ON journal.drug_id=drugs.id
-// 			JOIN patients ON journal.patient_id=patients.id
-// 			WHERE drugs.is_active=true $search_clause
-// 			ORDER BY id DESC
-// 		    LIMIT $rangeStr";
-// 	}
+$query = "SELECT SQL_CALC_FOUND_ROWS
+			journal.date,
+			journal.quantity,
+			drugs.id as drug_id,
+			drugs.name as drug_name,
+			providers.id as provider_id,
+			providers.name as provider_name,
+			patients.id as patient_id,
+			patients.surname as patient_surname,
+			diseases.id as patient_disease_id,
+			diseases.name as patient_disease_name,
+			doctors.id as doctor_id,
+			doctors.surname as doctor_surname
+			FROM journal 
+			JOIN drugs ON journal.drug_id=drugs.id
+			JOIN providers ON drugs.provider_id=providers.id
+			JOIN patients ON journal.patient_id=patients.id
+			JOIN doctors ON journal.doctor_id=doctors.id
+			RIGHT JOIN diseases ON patients.disease_id=diseases.id
+			WHERE drugs.is_active=true $search_clause
+			ORDER BY journal.id DESC
+		    LIMIT $rangeStr";
+	}
 
-// $content = select_rows($query, $rows_count, $values);
+$content = select_rows($query, $rows_count, $values);
 
-// $linksRange = get_links_range($rows_per_page, $rows_count, $page);
+$linksRange = get_links_range($rows_per_page, $rows_count, $page);
 
-// foreach ($content as $key => $obj) {
-// 	$content[$key]['drug'] = array("link" => "/drug?id=".$content[$key]['drug_id'], 'value' => $content[$key]['drug_name']);
-// 	unsetValues($content[$key], array('provider_id', 'provider_name'));
-// 	$content[$key]['provider'] = array("link" => "/provider?id=".$content[$key]['provider_id'], 'value' => $content[$key]['provider_name']);
-// 	unsetValues($content[$key], array('provider_id', 'provider_name'));
-// 	$content[$key]['patient'] = array("link" => "/provider?id=".$content[$key]['provider_id'], 'value' => $content[$key]['provider_name']);
-// 	unsetValues($content[$key], array('provider_id', 'provider_name'));
-// }
+foreach ($content as $key => $obj) {
+	$content[$key]['drug'] = array("link" => "/drug?id=".$content[$key]['drug_id'], 'value' => $content[$key]['drug_name']);
+	unsetValues($content[$key], array('drug_id', 'drug_name'));
+	$content[$key]['provider'] = array("link" => "/provider?id=".$content[$key]['provider_id'], 'value' => $content[$key]['provider_name']);
+	unsetValues($content[$key], array('provider_id', 'provider_name'));
+	$content[$key]['patient'] = array("link" => "/patient?id=".$content[$key]['patient_id'], 'value' => $content[$key]['patient_surname']);
+	unsetValues($content[$key], array('patient_id', 'patient_surname'));
+	$content[$key]['disease'] = array("link" => "/disease?id=".$content[$key]['patient_disease_id'], 'value' => $content[$key]['patient_disease_name']);
+	unsetValues($content[$key], array('patient_disease_id', 'patient_disease_name'));
+	$content[$key]['doctor'] = array("link" => "/doctor?id=".$content[$key]['doctor_id'], 'value' => $content[$key]['doctor_surname']);
+	unsetValues($content[$key], array('doctor_id', 'doctor_surname'));
+}
 
 ?>
 
@@ -69,7 +75,7 @@ require 'static/scripts/helpers.php';
 		<div class="panel panel-default">
 			<div class="panel-heading" data-toggle="collapse" href="#conditions" style="cursor: pointer;">
 				<h4 class="panel-title">
-					<span>Пошук <span class="caret"></span></span>
+					<span>Поиск <span class="caret"></span></span>
 				</h4>
 			</div>
 			<div id="conditions" class="panel-collapse collapse">
@@ -80,7 +86,7 @@ require 'static/scripts/helpers.php';
 							draw_fields('Препарат', array('t_name'=>'Назва'));
 							draw_fields('Постачальник', array('d_name'=>'Назва')); 
 							?>
-							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Пошук</div>
+							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Поиск</div>
 						</form>
 					</div>
 					<div class="col-xs-1"></div>
@@ -91,7 +97,7 @@ require 'static/scripts/helpers.php';
 </div>
 
 <div class="col-xs-12 col-md-offset-4 col-md-4"">
-	<div class="alert alert-warning alert-count-rows">Знайдено записiв: <?php echo "$rows_count"; ?> </div>
+	<div class="alert alert-warning alert-count-rows">Найдено записей: <?php echo "$rows_count"; ?> </div>
 </div>
 
 <div class="col-xs-6">
@@ -107,12 +113,12 @@ require 'static/scripts/helpers.php';
 	</div>
 </div>
 <div class="col-xs-6">
-	<div style="float: right;" id="add-patient" class="jelly-button" data-toggle="modal" data-target="#add">Добавити</div>
+	<div style="float: right;" id="add-patient" class="jelly-button" data-toggle="modal" data-target="#add">Добавить</div>
 </div>
 
 
 <div class="col-xs-12">
-	<?php draw_table(array('ID', 'Назва', 'Постачальник'), $content, '/drug?id='); ?>
+	<?php draw_table(array('Дата', 'Количество', 'Препарат', 'Поставщик', 'Пациент', 'Болезнь', 'Доктор'), $content); ?>
 </div>
 
 <?php draw_pagination($page+1, $linksRange); ?>

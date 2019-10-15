@@ -1,5 +1,5 @@
 <?php
-	function draw_table($headers, $content, $linkToSingle){
+	function draw_table($headers, $content, $linkToSingle = false){
 ?>
 		<div class="shadow-z-1">
 			<table id="table" class="table table-hover table-bordered">
@@ -14,7 +14,10 @@
 				<tbody>
 <?php
             	foreach ($content as $obj) {
-            		echo '<tr onclick=\'javascript:window.location.replace("'.$linkToSingle.$obj["id"].'")\'>';
+					if($linkToSingle)
+						echo '<tr onclick=\'javascript:window.location.replace("'.$linkToSingle.$obj["id"].'")\'>';
+					else
+						echo '<tr>';
             		foreach($obj as $item){
             			if(is_array($item)){
             				echo "<td>";
@@ -74,13 +77,13 @@ function draw_fields($head_description, $fields){
 		echo '<div class="panel-body">';
 	}
 
-	foreach ($fields as $name => $discription) {
+	foreach ($fields as $name => $description) {
 		$predefined_value = '';
 		if(isset($_GET[$name]))
 			$predefined_value = htmlspecialchars($_GET[$name], ENT_QUOTES, "UTF-8");
 		
 		echo '<div class="form-group">
-					<label for="name" class="col-sm-2 control-label">'.$discription.'</label>
+					<label for="name" class="col-sm-2 control-label">'.$description.'</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="'.$name.'" name="'.$name.'" value="'.$predefined_value.'">
 					</div>
