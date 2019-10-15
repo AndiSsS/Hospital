@@ -12,17 +12,18 @@ else {
 	$values = array();
 	$rangeStr = get_limit_range($rows_per_page, $page);
 
-	if(isset($_GET['date']))
-		$search_clause = settle_search(array('date'=>'journal.date',
+	if(isset($_GET['quantity']))
+		$search_clause = settle_search(array(
 											'quantity'=>'journal.quantity',
-											'd_name'=>'drugs.name',
-											'd_provider'=>'providers.name', 	
-											'pr_name'=>'providers.name',
-											'p_name'=>'drugs.name',
-											'p_surname'=>'drugs.name',
-											'p_patronymic'=>'drugs.name',
-											'p_disease_id'=>'drugs.name',
-											'p_doctor_id'=>'patients.name', 
+											'drug_name'=>'drugs.name',
+											'provider_name'=>'providers.name', 	
+											'patient_name'=>'patients.name',
+											'patient_surname'=>'patients.surname',
+											'patient_patronymic'=>'patients.patronymic',
+											'disease_name'=>'diseases.name',
+											'doctor_name'=>'doctors.name',
+											'doctor_surname'=>'doctors.surname',
+											'doctor_patronymic'=>'doctors.patronymic', 
 											), 
 										$values);
 
@@ -83,8 +84,12 @@ foreach ($content as $key => $obj) {
 					<div class="col-xs-offset-1 col-xs-10">
 						<form class="form-horizontal">
 							<?php 
-							draw_fields('Препарат', array('t_name'=>'Назва'));
-							draw_fields('Постачальник', array('d_name'=>'Назва')); 
+							draw_fields('', array('quantity'=>'Количество'));
+							draw_fields('Препарат', array('drug_name'=>'Название'));
+							draw_fields('Поставщик', array('provider_name'=>'Название')); 
+							draw_fields('Пациент', array('patient_name'=>'Имя', 'patient_surname'=>'Фамилия', 'patient_patronymic'=>'Отчество'));
+							draw_fields('Болезнь', array('disease_name'=>'Название'));
+							draw_fields('Доктор', array('doctor_name'=>'Имя', 'doctor_surname'=>'Фамилия', 'doctor_patronymic'=>'Отчество'));
 							?>
 							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Поиск</div>
 						</form>
