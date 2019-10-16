@@ -1,13 +1,13 @@
 function formControl(form, isDelete){
 	if(isDelete==true){
-		if(confirm("Ви впевнені?")==true){
+		if(confirm("Вы уверены?")==true){
 			form.submit();
 		}
 	}
 	else{
 		for(var i=0; i < form.elements.length; i++){
 		    if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
-		        alert('Заповніть всі поля!');
+		        alert('Заполните все поля!');
 		        return false;
 		    }
 		}

@@ -116,12 +116,12 @@ function _pdoSet($allowed, &$values, $source = array()) {
 function _checkErrors($stmt, $allowed_fields, &$error){
 	foreach ($allowed_fields as $field) {
 		if($_POST[$field] === ''){
-			$error = 'Заповніть всі поля!';
+			$error = 'Заполните все поля!';
 			return true;
 		}
 	}
 	if(!isset($stmt)){
-		$error = 'Виникла помилка. Спробуйте ще раз.';
+		$error = 'Возникла ошибка. Попробуйте еще раз.';
 		return true;
 	}
 }

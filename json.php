@@ -5,27 +5,27 @@ header('Content-Type: application/json');
 $pdo = dbConnect();
 
 if($_GET['get']=='providers'){
-	$stmt = $pdo->query('SELECT id, name FROM providers');
+	$stmt = $pdo->query('SELECT id, name FROM providers WHERE is_active=true');
 	$json = json_encode($stmt->fetchAll());
 	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
 }
 elseif ($_GET['get']=='drugs') {
-	$stmt = $pdo->query('SELECT id, name FROM drugs');
+	$stmt = $pdo->query('SELECT id, name FROM drugs WHERE is_active=true');
 	$json = json_encode($stmt->fetchAll());
 	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
 }
 elseif ($_GET['get']=='diseases') {
-	$stmt = $pdo->query('SELECT id, name FROM diseases');
+	$stmt = $pdo->query('SELECT id, name FROM diseases WHERE is_active=true');
 	$json = json_encode($stmt->fetchAll());
 	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
 }
 elseif ($_GET['get']=='patients') {
-	$stmt = $pdo->query('SELECT id, surname, name, patronymic FROM patients');
+	$stmt = $pdo->query('SELECT id, surname, name, patronymic FROM patients WHERE is_active=true');
 	$json = json_encode($stmt->fetchAll());
 	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
 }
 elseif ($_GET['get']=='doctors') {
-	$stmt = $pdo->query('SELECT id, surname, name, patronymic FROM doctors');
+	$stmt = $pdo->query('SELECT id, surname, name, patronymic FROM doctors WHERE is_active=true');
 	$json = json_encode($stmt->fetchAll());
 	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
 }

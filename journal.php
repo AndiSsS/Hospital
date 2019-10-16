@@ -5,6 +5,14 @@ require 'static/templates/content.php';
 require 'static/scripts/helpers.php';  
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	if($_POST['is_' . $journal_record_types[0]]){
+		$_POST['patient_id'] = null;
+		$_POST['doctor_id'] = null;
+		$_POST['type'] = $journal_record_types[0];
+	}
+	else
+		$_POST['type'] == $journal_record_types[1];
+
 	insert_row('journal', $journalAllowed, '/journal', $error);
 }
 else {
@@ -45,7 +53,7 @@ $query = "SELECT SQL_CALC_FOUND_ROWS
 			JOIN providers ON drugs.provider_id=providers.id
 			JOIN patients ON journal.patient_id=patients.id
 			JOIN doctors ON journal.doctor_id=doctors.id
-			RIGHT JOIN diseases ON patients.disease_id=diseases.id
+			JOIN diseases ON patients.disease_id=diseases.id
 			WHERE drugs.is_active=true $search_clause
 			ORDER BY journal.id DESC
 		    LIMIT $rangeStr";
@@ -133,7 +141,7 @@ foreach ($content as $key => $obj) {
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Добавити препарат</h4>
+					<h4 class="modal-title">Добавить запись журнала</h4>
 				</div>
 				<div class="modal-body">
 					<?php 
@@ -143,21 +151,27 @@ foreach ($content as $key => $obj) {
 					<form class="form-horizontal" method="POST">
 						<input type="hidden" value="$">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Назва</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="name" name="name" required>
+							<label for="is_intake" class="col-sm-2 control-label">Поступление препарата?</label>
+							<div class="col-sm-1">
+								<input type="checkbox" class="form-control" id="is_intake" name="is_intake" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="disease_id" class="col-sm-2 control-label">Постачальник</label>
+							<label for="quantity" class="col-sm-2 control-label">Количество</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="quantity" name="quantity" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="drug_id" class="col-sm-2 control-label">Препарат</label>
 							<div class="col-sm-10">
 								<input 
-									value='{$content[0]['provider_id']}'
+									value='{$content[0]['drug_id']}'
 									type="text" 
 									class="form-control flexdatalist" 
-									id="provider_id" 
-									name='provider_id'
-									data-data='/json?get=providers'
+									id="drug_id" 
+									name='drug_id'
+									data-data='/json?get=drugs'
 							        data-search-in='name'
 							        data-search-by-word='true'
 							        data-text-property='name'
@@ -166,7 +180,53 @@ foreach ($content as $key => $obj) {
 							        data-value-property='id'
 							        data-cache-lifetime='10'
 							        data-allow-duplicate-values='true'
-							        data-no-results-text='Нічого не знайдено'
+							        data-no-results-text='Ничего не найдено'
+							        data-min-length='0'
+							       >
+							</div>
+						</div>
+						<div id="patient_id_container" class="form-group">
+							<label for="name" class="col-sm-2 control-label">Пациент</label>
+							<div class="col-sm-10">
+								<input 
+									value='{$content[0]['patient_id']}'
+									type="text" 
+									class="form-control flexdatalist" 
+									id="patient_id" 
+									name='patient_id'
+									data-data='/json?get=patients'
+							        data-search-in='name'
+							        data-search-by-word='true'
+							        data-text-property='surname'
+							        data-visible-properties='["surname"]'
+							        data-selection-required='true'
+							        data-value-property='id'
+							        data-cache-lifetime='10'
+							        data-allow-duplicate-values='true'
+							        data-no-results-text='Ничего не найдено'
+							        data-min-length='0'
+							       >
+							</div>
+						</div>
+						<div id="doctor_id_container" class="form-group">
+							<label for="name" class="col-sm-2 control-label">Доктор</label>
+							<div class="col-sm-10">
+								<input 
+									value='{$content[0]['doctor_id']}'
+									type="text" 
+									class="form-control flexdatalist" 
+									id="doctor_id" 
+									name='doctor_id'
+									data-data='/json?get=doctors'
+							        data-search-in='name'
+							        data-search-by-word='true'
+							        data-text-property='surname'
+							        data-visible-properties='["surname"]'
+							        data-selection-required='true'
+							        data-value-property='id'
+							        data-cache-lifetime='10'
+							        data-allow-duplicate-values='true'
+							        data-no-results-text='Ничего не найдено'
 							        data-min-length='0'
 							       >
 							</div>
@@ -181,6 +241,22 @@ foreach ($content as $key => $obj) {
 	if(isset($error))
 		echo '<script>$("#add").modal()</script>';
 	?>
+
+<script>
+$(document).ready(function() {
+	$('#is_intake').change(function() {
+        if(this.checked) {
+            $('#patient_id_container').hide(500)
+			$('#doctor_id_container').hide(500)
+        }
+		else{
+			$('#patient_id_container').show(500)
+			$('#doctor_id_container').show(500)
+		}
+    });
+});
+</script>
+
 </div>
 </div>
 </div>
