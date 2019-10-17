@@ -8,16 +8,51 @@ global $journal_record_types;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if(isset($_POST['is_'.$journal_record_types[0]]) && $_POST['is_'.$journal_record_types[0]]){
+		// if type is intake then insert row without patient and doctor data
 		$_POST['patient_id'] = null;
 		$_POST['doctor_id'] = null;
 		$_POST['type'] = $journal_record_types[0];
 	}
-	else
+	else{
+		// if type is outgo then first calculate if there are enough drugs and then insert the row
 		$_POST['type'] = $journal_record_types[1];
+		$drug_id = isset($_POST['drug_id']) ? $_POST['drug_id'] : -1;
+		$drug_id = isset($_POST['drug_id']) ? $_POST['drug_id'] : -1;
+		$drug_outgo_quantity = isset($_POST['quantity']) ? $_POST['quantity'] : -1;
+
+		if($drug_outgo_quantity < 1 || $drug_id < 1){
+			header("Location: /journal?error=Возникла ошибка. Попробуйте еще раз.");
+			die();
+		}
+
+		$querySumOfIntake = "SELECT SUM(quantity) as intake_quantity
+							 FROM journal 
+							 WHERE type='$journal_record_types[0]'
+							 AND drug_id=$drug_id";
+
+		$querySumOfOutgo = "SELECT SUM(quantity) as outgo_quantity
+							FROM journal 
+							WHERE type='$journal_record_types[1]'
+							AND drug_id=$drug_id";
+
+		$intake = select_rows($querySumOfIntake, $rows_count)[0]['intake_quantity'];
+		$outgo = select_rows($querySumOfOutgo, $rows_count)[0]['outgo_quantity'];
+		$drug_quantity = $intake - $outgo;
+		
+		if($drug_quantity < $drug_outgo_quantity){
+			header("Location: /journal?error=Недостаточное количество препарата. В наличии: $drug_quantity");
+			die();
+		}
+	}
 
 	insert_row('journal', $journalAllowed, '/journal', $error);
 }
 else {
+	if(isset($_GET['error'])){
+		global $error;
+		$error = $_GET['error'];
+	}
+
 	$search_clause = "";
 	$values = array();
 	$rangeStr = get_limit_range($rows_per_page, $page);

@@ -70,8 +70,10 @@ function insert_row($table, $allowed_fields, $return_to=false, &$error){
 	$stmt->execute($values);
 	$pdo = null;
 	$stmt = null;
-	if($return_to)
+	if($return_to){
 		header("Location: $return_to");
+		die();
+	}
 }
 function update_row($table, $row_id, $allowed_fields, $return_to=false, &$error){
 	$pdo = _dbConnect();
