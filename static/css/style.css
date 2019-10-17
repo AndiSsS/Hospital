@@ -36,3 +36,9 @@
 	padding: 5px;
 	text-align: center;
 }
+tr.journal-intake{
+	background-color: #e0ffea73;
+}
+tr.journal-outgo{
+	background-color: #fff5e0ad;
+}

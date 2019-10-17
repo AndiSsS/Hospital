@@ -1,5 +1,5 @@
 <?php
-	function draw_table($headers, $content, $linkToSingle = false){
+	function draw_table($headers, $content, $linkToSingle = false, $is_journal = false){
 ?>
 		<div class="shadow-z-1">
 			<table id="table" class="table table-hover table-bordered">
@@ -16,18 +16,23 @@
             	foreach ($content as $obj) {
 					if($linkToSingle)
 						echo '<tr onclick=\'javascript:window.location.replace("'.$linkToSingle.$obj["id"].'")\'>';
+					else if($is_journal){
+						echo '<tr class="journal-'.$obj['type'].'">';
+						unset($obj['type']);
+					}
 					else
 						echo '<tr>';
+
             		foreach($obj as $item){
             			if(is_array($item)){
-            				echo "<td>";
-            				echo '<a href='.$item["link"].'>';
-            				echo $item["value"];
-            				echo "</a>";
-            				echo "</td>";
+							echo "<td>";
+							echo '<a href='.$item["link"].'>';
+							echo $item["value"];
+							echo "</a>";
+							echo "</td>";
             			}
-            			else
-	                    	echo "<td>".$item."</td>";
+						else
+							echo "<td>".$item."</td>";
 	            	}
             		echo "</tr>";
 	            }         	

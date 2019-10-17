@@ -4,14 +4,16 @@ require 'static/templates/header.html';
 require 'static/templates/content.php';
 require 'static/scripts/helpers.php';  
 
+global $journal_record_types;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	if($_POST['is_' . $journal_record_types[0]]){
+	if(isset($_POST['is_'.$journal_record_types[0]]) && $_POST['is_'.$journal_record_types[0]]){
 		$_POST['patient_id'] = null;
 		$_POST['doctor_id'] = null;
 		$_POST['type'] = $journal_record_types[0];
 	}
 	else
-		$_POST['type'] == $journal_record_types[1];
+		$_POST['type'] = $journal_record_types[1];
 
 	insert_row('journal', $journalAllowed, '/journal', $error);
 }
@@ -38,6 +40,7 @@ else {
 $query = "SELECT SQL_CALC_FOUND_ROWS
 			journal.date,
 			journal.quantity,
+			journal.type,
 			drugs.id as drug_id,
 			drugs.name as drug_name,
 			providers.id as provider_id,
@@ -74,6 +77,12 @@ foreach ($content as $key => $obj) {
 	unsetValues($content[$key], array('patient_disease_id', 'patient_disease_name'));
 	$content[$key]['doctor'] = array("link" => "/doctor?id=".$content[$key]['doctor_id'], 'value' => $content[$key]['doctor_surname']);
 	unsetValues($content[$key], array('doctor_id', 'doctor_surname'));
+
+	if($content[$key]['type'] == $journal_record_types[0]){
+		$content[$key]['patient'] = '&#8212;';
+		$content[$key]['disease'] = '&#8212;';
+		$content[$key]['doctor'] = '&#8212;';
+	}
 }
 
 ?>
@@ -131,7 +140,7 @@ foreach ($content as $key => $obj) {
 
 
 <div class="col-xs-12">
-	<?php draw_table(array('Дата', 'Количество', 'Препарат', 'Поставщик', 'Пациент', 'Болезнь', 'Доктор'), $content); ?>
+	<?php draw_table(array('Дата', 'Количество', 'Препарат', 'Поставщик', 'Пациент', 'Болезнь', 'Доктор'), $content, false, true); ?>
 </div>
 
 <?php draw_pagination($page+1, $linksRange); ?>
