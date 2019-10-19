@@ -29,17 +29,17 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редагування препарату</div>
+				<div class="panel-heading panel-white-blue">Редактирование препарата</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Назва</label>
+							<label for="name" class="col-sm-2 control-label">Название</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="disease_id" class="col-sm-2 control-label">Постачальник</label>
+							<label for="disease_id" class="col-sm-2 control-label">Поставщик</label>
 							<div class="col-sm-10">
 								<input 
 									value='{$content[0]['provider_id']}'
@@ -56,7 +56,7 @@ echo <<<EOT
 							        data-value-property='id'
 							        data-cache-lifetime='10'
 							        data-allow-duplicate-values='true'
-							        data-no-results-text='Нічого не знайдено'
+							        data-no-results-text='Ничего не найдено'
 							        data-min-length='0'
 							       >
 							</div>

@@ -73,12 +73,12 @@ function _checkErrors($stmt, &$error){
 	global $patientAllowed;
 	foreach ($patientAllowed as $field) {
 		if($_POST[$field] === ''){
-			$error = 'Заповніть всі поля!';
+			$error = 'Заполните все поля!';
 			return true;
 		}
 	}
 	if(!isset($stmt)){
-		$error = 'Виникла помилка. Спробуйте ще раз.';
+		$error = 'Возникла ошибка. Попробуйте еще раз..';
 		return true;
 	}
 }

@@ -26,29 +26,29 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редагування хворого</div>
+				<div class="panel-heading panel-white-blue">Редактирование больного</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Ім'я</label>
+							<label for="name" class="col-sm-2 control-label">Имя</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="surname" class="col-sm-2 control-label">Прізвище</label>
+							<label for="surname" class="col-sm-2 control-label">Фамилия</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="surname" name="surname" required value="{$content[0]['surname']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="patronymic" class="col-sm-2 control-label">По батькові</label>
+							<label for="patronymic" class="col-sm-2 control-label">Отчество</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="patronymic" name="patronymic" required value="{$content[0]['patronymic']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="disease_id" class="col-sm-2 control-label">Хвороба</label>
+							<label for="disease_id" class="col-sm-2 control-label">Болезнь</label>
 							<div class="col-sm-10">
 								<input 
 									value='{$content[0]['disease_id']}'
@@ -65,13 +65,13 @@ echo <<<EOT
 							        data-value-property='id'
 							        data-cache-lifetime='10'
 							        data-allow-duplicate-values='true'
-							        data-no-results-text='Нічого не знайдено'
+							        data-no-results-text='Ничего не найдено'
 							        data-min-length='0'
 							       >
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="doctor_id" class="col-sm-2 control-label">Лікар</label>
+							<label for="doctor_id" class="col-sm-2 control-label">Врач</label>
 							<div class="col-sm-10">
 								<input 
 									type="text" 
@@ -84,7 +84,7 @@ echo <<<EOT
 								    data-selection-required='true'
 								    data-search-in='["surname", "name", "patronymic"]'
 								    data-text-property='{surname} {name} {patronymic}' 
-								    data-no-results-text='Нічого не знайдено'
+								    data-no-results-text='Ничего не найдено'
 								    data-allow-duplicate-values='true'
 								    data-value-property='id'
 								    data-cache-lifetime='10'>

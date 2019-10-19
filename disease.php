@@ -28,11 +28,11 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редагування хвороби</div>
+				<div class="panel-heading panel-white-blue">Редактирование болезни</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Назва</label>
+							<label for="name" class="col-sm-2 control-label">Название</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
 							</div>

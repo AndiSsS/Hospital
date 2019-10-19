@@ -31,29 +31,29 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редагування лікаря</div>
+				<div class="panel-heading panel-white-blue">Редактирование врача</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Ім'я</label>
+							<label for="name" class="col-sm-2 control-label">Имя</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Прізвище</label>
+							<label for="name" class="col-sm-2 control-label">Фамилия</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="surname" name="surname" required value="{$content[0]['surname']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">По батькові</label>
+							<label for="name" class="col-sm-2 control-label">Отчество</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="patronymic" name="patronymic" required value="{$content[0]['patronymic']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Номер телефону</label>
+							<label for="name" class="col-sm-2 control-label">Номер телефона</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="mobile_number" name="mobile_number" required value="{$content[0]['mobile_number']}">
 							</div>

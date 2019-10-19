@@ -160,7 +160,7 @@ foreach ($content as $key => $obj) {
 <div class="col-xs-6">
 	<div class="dropdown">
 		<div class="jelly-button limit-button dropdown-toggle" type="button" data-toggle="dropdown">
-			Рядків на сторінці <span class="caret"></span>
+			Строк на странице <span class="caret"></span>
 		</div>
 		<ul class="dropdown-menu">
 			<li><a onclick="rowsPerPage(50)">50</a></li>

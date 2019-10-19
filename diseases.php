@@ -35,7 +35,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 		<div class="panel panel-default">
 			<div class="panel-heading" data-toggle="collapse" href="#conditions" style="cursor: pointer;">
 				<h4 class="panel-title">
-					<span>Пошук <span class="caret"></span></span>
+					<span>Поиск <span class="caret"></span></span>
 				</h4>
 			</div>
 			<div id="conditions" class="panel-collapse collapse">
@@ -43,9 +43,9 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 					<div class="col-xs-offset-1 col-xs-10">
 						<form class="form-horizontal">
 							<?php 
-							draw_fields(false, array('d_name'=>'Назва'));
+							draw_fields(false, array('d_name'=>'Название'));
 							?>
-							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Пошук</div>
+							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Поиск</div>
 						</form>
 					</div>
 					<div class="col-xs-1"></div>
@@ -56,13 +56,13 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 </div>
 
 <div class="col-xs-12 col-md-offset-4 col-md-4"">
-	<div class="alert alert-warning alert-count-rows">Знайдено записiв: <?php echo "$rows_count"; ?> </div>
+	<div class="alert alert-warning alert-count-rows">Найдено записей: <?php echo "$rows_count"; ?> </div>
 </div>
 
 <div class="col-xs-6">
 	<div class="dropdown">
 		<div class="jelly-button limit-button dropdown-toggle" type="button" data-toggle="dropdown">
-			Рядків на сторінці <span class="caret"></span>
+			Строк на странице <span class="caret"></span>
 		</div>
 		<ul class="dropdown-menu">
 			<li><a onclick="rowsPerPage(50)">50</a></li>
@@ -72,12 +72,12 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 	</div>
 </div>
 <div class="col-xs-6">
-	<div style="float: right;" id="add-patient" class="jelly-button" data-toggle="modal" data-target="#add">Добавити</div>
+	<div style="float: right;" id="add-patient" class="jelly-button" data-toggle="modal" data-target="#add">Добавить</div>
 </div>
 
 
 <div class="col-xs-12">
-	<?php draw_table(array('ID', 'Назва'), $content, '/disease?id='); ?>
+	<?php draw_table(array('ID', 'Название'), $content, '/disease?id='); ?>
 </div>
 
 <?php draw_pagination($page+1, $linksRange); ?>
@@ -87,7 +87,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Добавити хворобу</h4>
+					<h4 class="modal-title">Добавить болезнь</h4>
 				</div>
 				<div class="modal-body">
 					<?php 
@@ -97,7 +97,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 					<form class="form-horizontal" method="POST">
 						<input type="hidden" value="$">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Назва</label>
+							<label for="name" class="col-sm-2 control-label">Название</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required>
 							</div>
