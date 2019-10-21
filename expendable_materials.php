@@ -1,24 +1,27 @@
 <?php 
-$active_item = 'diseases';
+$active_item = 'expendable_materials'; 
 require 'static/templates/header.html'; 
 require 'static/templates/content.php';
 require 'static/scripts/helpers.php';  
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	insert_row('diseases', $diseaseAllowed, '/diseases', $error);
+	insert_row('expendable_materials', $expendableMaterialAllowed, '/expendable_materials', $error);
 }
 else {
 	$search_clause = "";
 	$values = array();
 	$rangeStr = get_limit_range($rows_per_page, $page);
 
-	if(isset($_GET['d_name']))
-		$search_clause = settle_search(array('d_name'=>'diseases.name'), $values);
+	if(isset($_GET['material_name']))
+		$search_clause = settle_search(array('material_name'=>'expendable_materials.name',
+										     'material_quantity'=>'expendable_materials.quantity'), 
+										$values);
 
 $query = "SELECT SQL_CALC_FOUND_ROWS
-			id,
-	 		name
-			FROM diseases 
+	 		id, 
+	 		name,
+			quantity
+			FROM expendable_materials 
 			WHERE is_active=true $search_clause
 			ORDER BY id DESC
 		    LIMIT $rangeStr";
@@ -43,7 +46,8 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 					<div class="col-xs-offset-1 col-xs-10">
 						<form class="form-horizontal">
 							<?php 
-							draw_fields(false, array('d_name'=>'Название'));
+							draw_fields(false, array('material_name'=>'Название',
+													 'material_quantity'=>'Количество'));
 							?>
 							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Поиск</div>
 						</form>
@@ -77,7 +81,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 
 
 <div class="col-xs-12">
-	<?php draw_table(array('ID', 'Название'), $content, '/disease?id='); ?>
+	<?php draw_table(array('ID', 'Название', 'Количество'), $content, '/expendable_material?id='); ?>
 </div>
 
 <?php draw_pagination($page+1, $linksRange); ?>
@@ -87,7 +91,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Добавить болезнь</h4>
+					<h4 class="modal-title">Добавить расходный материал</h4>
 				</div>
 				<div class="modal-body">
 					<?php 
@@ -100,6 +104,12 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 							<label for="name" class="col-sm-2 control-label">Название</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="quantity" class="col-sm-2 control-label">Количество</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="quantity" name="quantity" required>
 							</div>
 						</div>
 						<div class="jelly-button green" onclick="formControl(this.parentNode)">Готово</div>

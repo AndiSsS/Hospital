@@ -1,19 +1,19 @@
 <?php 
-$active_item = 'diseases'; 
+$active_item = 'expendable_materials'; 
 require 'static/templates/header.html'; 
 
-if(!is_numeric($_GET['id']) || !is_row_exists('diseases', $_GET['id']))
+if(!is_numeric($_GET['id']) || !is_row_exists('expendable_materials', $_GET['id']))
 	header('Location: /404');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if(isset($_POST['delete']))
-		eliminate_row('diseases', $_GET['id'], '/diseases');
+		eliminate_row('expendable_materials', $_GET['id'], '/expendable_materials');
 	else 
-		update_row('diseases', $_GET['id'], $diseaseAllowed, '/disease?id='.$_GET["id"], $error);
+		update_row('expendable_materials', $_GET['id'], $expendableMaterialAllowed, '/expendable_material?id='.$_GET["id"], $error);
 }
 
-$content = select_rows('SELECT name
-						FROM diseases 
+$content = select_rows('SELECT name, quantity
+						FROM expendable_materials 
 						WHERE id = ?', $rows_count, array($_GET['id']));
 
 if(isset($error))
@@ -28,13 +28,19 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редактирование болезни</div>
+				<div class="panel-heading panel-white-blue">Редактирование расходного материала</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
 							<label for="name" class="col-sm-2 control-label">Название</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">Количество</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="quantity" name="quantity" required value="{$content[0]['quantity']}">
 							</div>
 						</div>
 						<div class="col-xs-11">

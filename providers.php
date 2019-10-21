@@ -5,7 +5,7 @@ require 'static/templates/content.php';
 require 'static/scripts/helpers.php';  
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	insert_row('providers', $drugsAllowed, '/providers', $error);
+	insert_row('providers', $providerAllowed, '/providers', $error);
 }
 else {
 	$search_clause = "";
