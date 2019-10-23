@@ -60,9 +60,9 @@ require 'static/scripts/dbManager.php';
             <li>
                 <?php 
                 if($active_item=='drugs')
-                    echo '<i class="active fa fa-plus-circle" aria-hidden="true"></i>';
+                    echo '<i class="active fas fa-pills" aria-hidden="true"></i>';
                 else
-                    echo '<i class="fa fa-plus-circle" aria-hidden="true"></i>';
+                    echo '<i class="fas fa-pills" aria-hidden="true"></i>';
                 ?>
                 <div class="animated slideInLeft">Препараты</div>
             </li>
@@ -87,6 +87,39 @@ require 'static/scripts/dbManager.php';
                     echo '<i class="fa fa-truck" aria-hidden="true"></i>';
                 ?>
                 <div class="animated slideInLeft">Поставщики</div>
+            </li>
+        </a>
+        <a href="/apparatuses">
+            <li>
+                <?php 
+                if($active_item=='apparatuses')
+                    echo '<i class="active fas fa-plug" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fas fa-plug" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Аппараты</div>
+            </li>
+        </a>
+        <a href="/chambers">
+            <li>
+                <?php 
+                if($active_item=='chambers')
+                    echo '<i class="active fas fa-door-open" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fas fa-door-open" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Палаты</div>
+            </li>
+        </a>
+        <a href="/beds">
+            <li>
+                <?php 
+                if($active_item=='beds')
+                    echo '<i class="active fas fa-bed" aria-hidden="true"></i>';
+                else
+                    echo '<i class="fas fa-bed" aria-hidden="true"></i>';
+                ?>
+                <div class="animated slideInLeft">Кровати</div>
             </li>
         </a>
         <a href="/expendable_materials">

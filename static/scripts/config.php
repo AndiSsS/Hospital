@@ -13,4 +13,7 @@ $drugAllowed = array('name', 'provider_id');
 $diseaseAllowed = array('name');
 $providerAllowed = array('name');
 $expendableMaterialAllowed = array('name', 'quantity');
+$apparatusAllowed = array('name', 'doctor_id');
+$chamberAllowed = array('number');
+$bedAllowed = array('number', 'chamber_id');
 ?>
