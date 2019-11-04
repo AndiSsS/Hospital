@@ -1,23 +1,39 @@
 <?php 
-$active_item = 'providers'; 
+$active_item = 'chambers'; 
 require 'static/templates/header.html'; 
 
-if(!is_numeric($_GET['id']) || !is_row_exists('providers', $_GET['id']))
+if(!is_numeric($_GET['id']) || !is_row_exists('chambers', $_GET['id']))
 	header('Location: /404');
+
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if(isset($_POST['delete']))
-		eliminate_row('providers', $_GET['id'], '/providers');
+	{
+		$query = 'SELECT COUNT(*) as count
+				FROM `chambers` 
+				JOIN patients ON patients.chamber_id = chambers.id
+				JOIN beds ON beds.chamber_id = chambers.id
+				WHERE chambers.id = '.$_GET['id'];
+
+		$content = select_rows($query, $rows_count);
+		if($content[0]['count'] > 0){
+			global $error;
+			$error = "Есть привязанные пациенты или кровати к этой палате";
+		} 
+		if(!$error)
+			eliminate_row('chambers', $_GET['id'], '/chambers');	
+	}
 	else 
-		update_row('providers', $_GET['id'], $providerAllowed, '/provider?id='.$_GET["id"], $error);
+		update_row('chambers', $_GET['id'], $chamberAllowed, '/chamber?id='.$_GET["id"], $error);
 }
 
-$content = select_rows('SELECT name
-						FROM providers 
+$content = select_rows('SELECT number
+						FROM chambers 
 						WHERE id = ?', $rows_count, array($_GET['id']));
 
-if(isset($error))
-	$error_html = '<div class="alert alert-warning">'.$error.'</div>';
+if($error)
+	$error_html = '<div class="alert alert-danger">'.$error.'</div>';
 else
 	$error_html = '';
 
@@ -28,13 +44,13 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редактирование поставщика</div>
+				<div class="panel-heading panel-white-blue">Редактирование палаты</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Название</label>
+							<label for="number" class="col-sm-2 control-label">Номер помещения</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
+								<input type="text" class="form-control" id="number" name="number" required value="{$content[0]['number']}">
 							</div>
 						</div>
 						<div class="col-xs-11">

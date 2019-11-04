@@ -29,6 +29,16 @@ elseif ($_GET['get']=='doctors') {
 	$json = json_encode($stmt->fetchAll());
 	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
 }
+elseif ($_GET['get']=='chambers') {
+	$stmt = $pdo->query('SELECT id, number FROM chambers WHERE is_active=true');
+	$json = json_encode($stmt->fetchAll());
+	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
+}
+elseif ($_GET['get']=='beds') {
+	$stmt = $pdo->query('SELECT id, number FROM beds WHERE is_active=true');
+	$json = json_encode($stmt->fetchAll());
+	echo preg_replace( "/:(\d+)/", ':"$1"', $json);
+}
 
 $pdo = null;
 $stmt = null;

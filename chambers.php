@@ -1,27 +1,27 @@
 <?php 
-$active_item = 'providers'; 
+$active_item = 'chambers'; 
 require 'static/templates/header.html'; 
 require 'static/templates/content.php';
 require 'static/scripts/helpers.php';  
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	insert_row('providers', $providerAllowed, '/providers', $error);
+	insert_row('chambers', $chamberAllowed, '/chambers', $error);
 }
 else {
 	$search_clause = "";
 	$values = array();
 	$rangeStr = get_limit_range($rows_per_page, $page);
 
-	if(isset($_GET['p_name']))
-		$search_clause = settle_search(array('p_name'=>'providers.name'), 
+	if(isset($_GET['number']))
+		$search_clause = settle_search(array('number'=>'chambers.number'), 
 										$values);
 
 $query = "SELECT SQL_CALC_FOUND_ROWS
 	 		id, 
-	 		name
-			FROM providers 
+	 		number
+			FROM chambers 
 			WHERE is_active=true $search_clause
-			ORDER BY id DESC
+			ORDER BY number DESC
 		    LIMIT $rangeStr";
 	}
 
@@ -44,7 +44,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 					<div class="col-xs-offset-1 col-xs-10">
 						<form class="form-horizontal">
 							<?php 
-							draw_fields(false, array('p_name'=>'Название'));
+							draw_fields(false, array('number'=>'Номер помещения'));
 							?>
 							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Поиск</div>
 						</form>
@@ -78,7 +78,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 
 
 <div class="col-xs-12">
-	<?php draw_table(array('ID', 'Название'), $content, '/provider?id='); ?>
+	<?php draw_table(array('ID', 'Номер помещения'), $content, '/chamber?id='); ?>
 </div>
 
 <?php draw_pagination($page+1, $linksRange); ?>
@@ -88,7 +88,7 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Добавить поставщика</h4>
+					<h4 class="modal-title">Добавить палату</h4>
 				</div>
 				<div class="modal-body">
 					<?php 
@@ -98,9 +98,9 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 					<form class="form-horizontal" method="POST">
 						<input type="hidden" value="$">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Название</label>
+							<label for="number" class="col-sm-2 control-label">Номер помещения</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="name" name="name" required>
+								<input type="text" class="form-control" id="number" name="number" required>
 							</div>
 						</div>
 						<div class="jelly-button green" onclick="formControl(this.parentNode)">Готово</div>

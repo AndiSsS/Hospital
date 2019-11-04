@@ -7,7 +7,7 @@ $opt = [
 ];
 $journalAllowed = array('quantity', 'drug_id', 'patient_id', 'doctor_id', 'type');
 $journal_record_types = array('intake', 'outgo');
-$patientAllowed = array('name', 'surname', 'patronymic', 'disease_id', 'doctor_id');
+$patientAllowed = array('name', 'surname', 'patronymic', 'disease_id', 'doctor_id', 'chamber_id');
 $doctorAllowed = array('name', 'surname', 'patronymic', 'mobile_number');
 $drugAllowed = array('name', 'provider_id');
 $diseaseAllowed = array('name');

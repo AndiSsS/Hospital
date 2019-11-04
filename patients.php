@@ -20,7 +20,8 @@ else {
 											  'd_name'=>'doctors.name',
 											  'd_surname'=>'doctors.surname',
 											  'd_patronymic'=>'doctors.patronymic',
-											  'd_mobile_number'=>'doctors.mobile_number'), $values);
+											  'd_mobile_number'=>'doctors.mobile_number',
+											  'chamber_number'=>'chambers.number'), $values);
 	$query = "SELECT SQL_CALC_FOUND_ROWS 
 					 patients.id, 
 					patients.name, 
@@ -29,10 +30,13 @@ else {
 					patients.disease_id as disease_id,
 					diseases.name as disease_name,
 					patients.doctor_id as doctor_id,
-					doctors.surname as doctor_surname
+					doctors.surname as doctor_surname,
+					chambers.id as chamber_id,
+					chambers.number as chamber_number
 					FROM patients 
 					JOIN diseases ON patients.disease_id=diseases.id
 					JOIN doctors ON patients.doctor_id=doctors.id
+					JOIN chambers ON patients.chamber_id=chambers.id
 					WHERE patients.is_active=true $search_clause
 					ORDER BY id DESC
 				    LIMIT $rangeStr";
@@ -45,7 +49,13 @@ $linksRange = get_links_range($rows_per_page, $rows_count, $page);
 foreach ($content as $key => $obj) {
 	$content[$key]['disease'] = array("link" => "/disease?id=".$content[$key]['disease_id'], 'value' => $content[$key]['disease_name']);
 	$content[$key]['doctor'] = array("link" => "/doctor?id=".$content[$key]['doctor_id'], 'value' => $content[$key]['doctor_surname']);
-	unsetValues($content[$key], array('disease_name', 'doctor_surname', 'disease_id', 'doctor_id'));
+	$content[$key]['chamber'] = array("link" => "/chamber?id=".$content[$key]['chamber_id'], 'value' => $content[$key]['chamber_number']);
+	unsetValues($content[$key], array('disease_name', 
+									  'doctor_surname', 
+									  'disease_id', 
+									  'doctor_id',
+									  'chamber_id',
+									  'chamber_number'));
 }
 
 ?>
@@ -63,7 +73,7 @@ foreach ($content as $key => $obj) {
 					<div class="col-xs-offset-1 col-xs-10">
 						<form class="form-horizontal">
 							<?php 
-							draw_fields('Больной', array('p_name'=>'Имя','p_surname'=>'Фамилия','p_patronymic'=>'Отчество','p_disease'=>'Болезнь'));
+							draw_fields('Больной', array('p_name'=>'Имя','p_surname'=>'Фамилия','p_patronymic'=>'Отчество','p_disease'=>'Болезнь','chamber_number'=>'Палата'));
 							draw_fields('Врач', array('d_name'=>'Имя','d_surname'=>'Фамилия','d_patronymic'=>'Отчество','d_mobile_number'=>'Номер телефона')); 
 							?>
 							<div class="jelly-button green form-button" onclick="this.parentNode.submit()">Поиск</div>
@@ -97,7 +107,7 @@ foreach ($content as $key => $obj) {
 </div>
 
 <div class="col-xs-12">
-	<?php draw_table(array('ID', 'Имя', 'Фамилия', 'Отчество', 'Болезнь', 'Врач'), $content, '/patient?id='); ?>
+	<?php draw_table(array('ID', 'Имя', 'Фамилия', 'Отчество', 'Болезнь', 'Врач', 'Палата'), $content, '/patient?id='); ?>
 </div>	
 
 	<?php draw_pagination($page+1, $linksRange); ?>
@@ -165,6 +175,29 @@ foreach ($content as $key => $obj) {
 								data-search-in='["surname", "name", "patronymic"]'
 								data-text-property='{surname} {name} {patronymic}' 
 								required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="chamber_id" class="col-sm-2 control-label">Палата</label>
+							<div class="col-sm-10">
+								<input 
+									value='{$content[0]['chamber_id']}'
+									type="text" 
+									class="form-control flexdatalist" 
+									id="chamber_id" 
+									name='chamber_id'
+									data-data='/json?get=chambers'
+							        data-search-in='number'
+							        data-search-by-word='true'
+							        data-text-property='number'
+							        data-visible-properties='["number"]'
+							        data-selection-required='true'
+							        data-value-property='id'
+							        data-cache-lifetime='10'
+							        data-allow-duplicate-values='true'
+							        data-no-results-text='Ничего не найдено'
+							        data-min-length='0'
+							       >
 							</div>
 						</div>
 						<div class="jelly-button green" onclick="formControl(this.parentNode)">Готово</div>

@@ -1,19 +1,19 @@
 <?php 
-$active_item = 'apparatuses'; 
+$active_item = 'beds'; 
 require 'static/templates/header.html'; 
 
-if(!is_numeric($_GET['id']) || !is_row_exists('apparatuses', $_GET['id']))
+if(!is_numeric($_GET['id']) || !is_row_exists('beds', $_GET['id']))
 	header('Location: /404');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if(isset($_POST['delete']))
-		eliminate_row('apparatuses', $_GET['id'], '/apparatuses');
+		eliminate_row('beds', $_GET['id'], '/beds');
 	else 
-		update_row('apparatuses', $_GET['id'], $apparatusAllowed, '/apparatus?id='.$_GET["id"], $error);
+		update_row('beds', $_GET['id'], $bedAllowed, '/bed?id='.$_GET["id"], $error);
 }
 
-$content = select_rows('SELECT name, doctor_id
-						FROM apparatuses 
+$content = select_rows('SELECT number, chamber_id
+						FROM beds 
 						WHERE id = ?', $rows_count, array($_GET['id']));
 
 if(isset($error))
@@ -28,29 +28,29 @@ echo <<<EOT
 		<br><br>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading panel-white-blue">Редактирование аппарата</div>
+				<div class="panel-heading panel-white-blue">Редактирование кровати</div>
 				<div class="panel-body">
 					<form class="form-horizontal" method="POST">
 						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">Название</label>
+							<label for="number" class="col-sm-2 control-label">Название</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="name" name="name" required value="{$content[0]['name']}">
+								<input type="text" class="form-control" id="number" name="number" required value="{$content[0]['number']}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="doctor_id" class="col-sm-2 control-label">Доктор</label>
+							<label for="chamber_id" class="col-sm-2 control-label">Палата</label>
 							<div class="col-sm-10">
 								<input 
-									value='{$content[0]['doctor_id']}'
+									value='{$content[0]['chamber_id']}'
 									type="text" 
 									class="form-control flexdatalist" 
-									id="doctor_id" 
-									name='doctor_id'
-									data-data='/json?get=doctors'
-							        data-search-in='surname'
+									id="chamber_id" 
+									name='chamber_id'
+									data-data='/json?get=chambers'
+							        data-search-in='number'
 							        data-search-by-word='true'
-							        data-text-property='surname'
-							        data-visible-properties='["surname"]'
+							        data-text-property='number'
+							        data-visible-properties='["number"]'
 							        data-selection-required='true'
 							        data-value-property='id'
 							        data-cache-lifetime='10'

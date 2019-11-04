@@ -25,7 +25,7 @@ $query = "SELECT SQL_CALC_FOUND_ROWS
 			FROM beds 
 			JOIN chambers ON beds.chamber_id = chambers.id
 			WHERE beds.is_active=true $search_clause
-			ORDER BY beds.id DESC
+			ORDER BY beds.number DESC
 		    LIMIT $rangeStr";
 	}
 
@@ -110,7 +110,7 @@ foreach ($content as $key => $obj) {
 						<div class="form-group">
 							<label for="number" class="col-sm-2 control-label">Инвентарный номер</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="number" number="number" required>
+								<input type="text" class="form-control" id="number" name="number" required>
 							</div>
 						</div>
 						<div class="form-group">
@@ -121,7 +121,7 @@ foreach ($content as $key => $obj) {
 									type="text" 
 									class="form-control flexdatalist" 
 									id="chamber_id" 
-									number='chamber_id'
+									name='chamber_id'
 									data-data='/json?get=chambers'
 							        data-search-in='number'
 							        data-search-by-word='true'
