@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Ноя 15 2019 г., 19:41
+-- Время создания: Ноя 04 2019 г., 20:56
 -- Версия сервера: 10.4.6-MariaDB
 -- Версия PHP: 7.3.9
 
@@ -21,6 +21,173 @@ SET time_zone = "+00:00";
 --
 -- База данных: `hospital`
 --
+
+DELIMITER $$
+--
+-- Процедуры
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_disease` (IN `disease_id` INT)  NO SQL
+BEGIN
+UPDATE `diseases` SET `is_active` = '0' WHERE `diseases`.`id` = disease_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_doctor` (IN `doctor_id` INT)  NO SQL
+BEGIN
+UPDATE `doctors` SET `is_active` = '0' WHERE `doctors`.`id` = doctor_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_drug` (IN `drug_id` INT)  NO SQL
+BEGIN
+UPDATE `drugs` SET `is_active` = '0' WHERE `drugs`.`id` = drug_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_journal` (IN `journal_id` INT)  NO SQL
+BEGIN
+DELETE FROM `journal` WHERE `journal`.`id` = journal_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_patient` (IN `patient_id` INT)  NO SQL
+BEGIN
+UPDATE `patients` SET `is_active` = '0' WHERE `patients`.`id` = patient_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `del_provider` (IN `provider_id` INT)  NO SQL
+BEGIN
+UPDATE `providers` SET `is_active` = '0' WHERE `providers`.`id` = provider_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_diseases` (IN `count` INT)  BEGIN  
+SELECT id, name 
+FROM diseases 
+WHERE is_active=1 
+ORDER BY id DESC 
+LIMIT count;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_doctors` (IN `count` INT)  NO SQL
+BEGIN
+SELECT id, name, surname, patronymic, mobile_number 
+FROM doctors 
+WHERE is_active=1 
+ORDER BY id DESC
+LIMIT count;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_drugs` (IN `count` INT)  NO SQL
+BEGIN
+SELECT drugs.id, drugs.name, providers.name as provider_name
+FROM drugs 
+JOIN providers ON drugs.provider_id=providers.id
+WHERE drugs.is_active=1 
+ORDER BY drugs.id DESC 
+LIMIT count;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_journal` (IN `count` INT)  NO SQL
+BEGIN
+SELECT 
+journal.id,
+journal.date,
+journal.quantity,
+drugs.name as drug,
+patients.name as patient_name,
+patients.surname as patient_surname,
+diseases.name as patient_disease,
+doctors.surname as patient_doctor_surname
+FROM journal 
+JOIN drugs ON journal.drug_id=drugs.id
+JOIN patients ON journal.patient_id=patients.id
+JOIN doctors ON patients.doctor_id=doctors.id
+JOIN diseases ON patients.disease_id=diseases.id
+WHERE drugs.is_active=true 
+ORDER BY journal.id DESC
+LIMIT count;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_journal_after_date` (IN `after_date` DATE)  NO SQL
+BEGIN
+SELECT 
+journal.id,
+journal.date,
+journal.quantity,
+drugs.name as drug,
+patients.name as patient_name,
+patients.surname as patient_surname,
+diseases.name as patient_disease,
+doctors.surname as patient_doctor_surname
+FROM journal 
+JOIN drugs ON journal.drug_id=drugs.id
+JOIN patients ON journal.patient_id=patients.id
+JOIN doctors ON patients.doctor_id=doctors.id
+JOIN diseases ON patients.disease_id=diseases.id
+WHERE drugs.is_active=true
+AND journal.date > after_date
+ORDER BY journal.id DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_patients` (IN `count` INT)  NO SQL
+BEGIN
+SELECT patients.id, patients.name, patients.surname, patients.patronymic, diseases.name as disease_name, doctors.surname as doctor_surname
+FROM patients 
+JOIN diseases ON patients.disease_id=diseases.id
+JOIN doctors ON patients.doctor_id=doctors.id
+WHERE patients.is_active=1 
+ORDER BY patients.id DESC 
+LIMIT count;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_providers` (IN `count` INT)  NO SQL
+BEGIN
+SELECT id, name
+FROM providers 
+WHERE is_active=1 
+ORDER BY id DESC
+LIMIT count;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `journal_count` ()  NO SQL
+BEGIN
+SELECT COUNT(*) as count_of_rows
+FROM journal;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_disease` (IN `name` VARCHAR(50))  NO SQL
+BEGIN
+INSERT INTO `diseases` (`id`, `name`, `is_active`)
+VALUES (NULL, name, '1');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_doctor` (IN `name` VARCHAR(100) CHARSET utf8, IN `surname` VARCHAR(100) CHARSET utf8, IN `patronymic` VARCHAR(100) CHARSET utf8, IN `mobile_number` INT)  NO SQL
+BEGIN
+INSERT INTO `doctors` (`id`, `name`, `surname`, `patronymic`, `mobile_number`, `is_active`) 
+VALUES (NULL, name, surname, patronymic, mobile_number, '1');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_drug` (IN `name` VARCHAR(100) CHARSET utf8, IN `provider_id` INT)  NO SQL
+BEGIN
+INSERT INTO `drugs` (`id`, `name`, `provider_id`, `is_active`) 
+VALUES (NULL, name, provider_id, '1');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_journal` (IN `date` DATE, IN `quantity` INT, IN `drug_id` INT, IN `patient_id` INT, IN `doctor_id` INT)  NO SQL
+BEGIN
+INSERT INTO `journal` (`id`, `date`, `quantity`, `drug_id`, `patient_id`, `doctor_id`) 
+VALUES (NULL, date, quantity, drug_id, patient_id, doctor_id);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_patient` (IN `name` VARCHAR(100) CHARSET utf8, IN `surname` VARCHAR(100) CHARSET utf8, IN `patronymic` VARCHAR(100) CHARSET utf8, IN `disease_id` INT, IN `doctor_id` INT)  NO SQL
+BEGIN
+INSERT INTO `patients` (`id`, `name`, `surname`, `patronymic`, `disease_id`, `doctor_id`, `is_active`) 
+VALUES (NULL, name, surname, patronymic, disease_id, doctor_id, '1');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_provider` (IN `name` VARCHAR(100) CHARSET utf8)  NO SQL
+BEGIN
+INSERT INTO `providers` (`id`, `name`, `is_active`) 
+VALUES (NULL, name, '1');
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 

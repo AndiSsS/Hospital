@@ -67,7 +67,7 @@ function insert_row($table, $allowed_fields, $return_to=false, &$error){
 	if(_checkErrors($stmt, $allowed_fields, $error))
 		return false;
 
-	$stmt->execute($values);
+    $stmt->execute($values);
 	$pdo = null;
 	$stmt = null;
 	if($return_to){
